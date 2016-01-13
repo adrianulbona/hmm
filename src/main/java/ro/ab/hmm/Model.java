@@ -39,7 +39,7 @@ public class Model<S extends State, O extends Observation> {
 
     public Map<Emission<S, O>, Double> emissionProbabilitiesFor(O observation) {
         return getReachableStatesFor(observation).stream().map(s -> new Emission<>(s, observation))
-                .map(this::probabilitiesFor)
+                .map(e -> new EmissionProbability(e, probabilityCalculator.probability(e)))
                 .collect(toMap(EmissionProbability::getEmission, EmissionProbability::getProbability));
     }
 
@@ -60,10 +60,6 @@ public class Model<S extends State, O extends Observation> {
             reachableStatesCache.put(observation, reachableStateFinder.reachableFor(observation));
         }
         return reachableStatesCache.get(observation);
-    }
-
-    private EmissionProbability probabilitiesFor(Emission<S, O> emission) {
-        return new EmissionProbability(emission, probabilityCalculator.probability(emission));
     }
 
     @Data
