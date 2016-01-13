@@ -1,11 +1,14 @@
 package ro.ab.hmm;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import ro.ab.hmm.probability.ProbabilityCalculator;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 
 /**
@@ -19,15 +22,62 @@ public class Model<S extends State, O extends Observation> {
     private final ProbabilityCalculator<S, O> probabilityCalculator;
     private final ReachableStateFinder<S, O> reachableStateFinder;
 
+    private final Map<O, List<S>> reachableStatesCache = new HashMap<>();
+
     public int observationCount() {
         return observations.size();
     }
 
     public int numberOfDistinctStates() {
-        return observations.stream().map(reachableStateFinder::findFor).flatMap(List::stream).collect(toSet()).size();
+        return observations.stream().map(reachableStateFinder::reachableFor).flatMap(List::stream).collect(toSet())
+                .size();
     }
 
     public int numberOfDistinctObservations() {
         return observations.stream().collect(toSet()).size();
+    }
+
+    public Map<Emission<S, O>, Double> emissionProbabilitiesFor(O observation) {
+        return getReachableStatesFor(observation).stream().map(s -> new Emission<>(s, observation))
+                .map(this::probabilitiesFor)
+                .collect(toMap(EmissionProbability::getEmission, EmissionProbability::getProbability));
+    }
+
+    public Map<Transition<S>, Double> transitionProbabilitiesFor(O observation, O nextObservation) {
+        final List<S> reachableStatesObservation = getReachableStatesFor(observation);
+        final List<S> reachableStatesNextObservation = getReachableStatesFor(nextObservation);
+
+        final List<Transition<S>> transitions = reachableStatesObservation.stream()
+                .flatMap(s -> reachableStatesNextObservation.stream().map(ns -> new Transition<>(s, ns)))
+                .collect(toList());
+
+        return transitions.stream().map(t -> new TransitionProbability(t, probabilityCalculator.probability(t)))
+                .collect(toMap(TransitionProbability::getTransition, TransitionProbability::getProbability));
+    }
+
+    private List<S> getReachableStatesFor(O observation) {
+        if (!reachableStatesCache.containsKey(observation)) {
+            reachableStatesCache.put(observation, reachableStateFinder.reachableFor(observation));
+        }
+        return reachableStatesCache.get(observation);
+    }
+
+    private EmissionProbability probabilitiesFor(Emission<S, O> emission) {
+        return new EmissionProbability(emission, probabilityCalculator.probability(emission));
+    }
+
+    @Data
+    private class EmissionProbability {
+
+        private final Emission<S, O> emission;
+        private final Double probability;
+    }
+
+
+    @Data
+    private class TransitionProbability {
+
+        private final Transition<S> transition;
+        private final Double probability;
     }
 }
