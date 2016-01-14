@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 public class Transition<S extends State> {
 
-    private final S from;
-    private final S to;
+	private final S from;
+	private final S to;
 }

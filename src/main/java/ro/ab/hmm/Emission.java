@@ -10,6 +10,6 @@ import lombok.Data;
 @Data
 public class Emission<S extends State, O extends Observation> {
 
-    private final S state;
-    private final O observation;
+	private final S state;
+	private final O observation;
 }

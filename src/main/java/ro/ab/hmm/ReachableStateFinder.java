@@ -8,5 +8,5 @@ import java.util.List;
  */
 public interface ReachableStateFinder<S extends State, O extends Observation> {
 
-    List<S> reachableFor(O observation);
+	List<S> reachableFor(O observation);
 }

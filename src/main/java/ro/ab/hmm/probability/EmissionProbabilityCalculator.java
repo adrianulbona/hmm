@@ -10,5 +10,5 @@ import ro.ab.hmm.State;
  */
 public interface EmissionProbabilityCalculator<S extends State, O extends Observation> {
 
-    Double probability(Emission<S, O> emission);
+	Double probability(Emission<S, O> emission);
 }

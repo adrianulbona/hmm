@@ -10,5 +10,5 @@ import ro.ab.hmm.Transition;
  */
 public interface TransitionProbabilityCalculator<S extends State> {
 
-    Double probability(Transition<S> transition);
+	Double probability(Transition<S> transition);
 }
