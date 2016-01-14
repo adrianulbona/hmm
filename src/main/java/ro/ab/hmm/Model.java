@@ -33,10 +33,6 @@ public class Model<S extends State, O extends Observation> {
                 .size();
     }
 
-    public int numberOfDistinctObservations() {
-        return observations.stream().collect(toSet()).size();
-    }
-
     public Map<Emission<S, O>, Double> emissionProbabilitiesFor(O observation) {
         return getReachableStatesFor(observation).stream().map(s -> new Emission<>(s, observation))
                 .map(e -> new EmissionProbability(e, probabilityCalculator.probability(e)))
@@ -55,7 +51,7 @@ public class Model<S extends State, O extends Observation> {
                 .collect(toMap(TransitionProbability::getTransition, TransitionProbability::getProbability));
     }
 
-    private List<S> getReachableStatesFor(O observation) {
+    public List<S> getReachableStatesFor(O observation) {
         if (!reachableStatesCache.containsKey(observation)) {
             reachableStatesCache.put(observation, reachableStateFinder.reachableFor(observation));
         }
