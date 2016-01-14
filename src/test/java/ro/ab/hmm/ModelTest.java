@@ -30,7 +30,7 @@ public class ModelTest {
 
 	@Test
 	public void testObservationsCount() {
-		assertEquals(4, Wikipedia.INSTANCE.hmm.observationCount());
+		assertEquals(6, Wikipedia.INSTANCE.hmm.observationCount());
 	}
 
 	@Test
@@ -50,9 +50,8 @@ public class ModelTest {
 
 	@Test
 	public void testRetrievalOfReachableStates() {
-		final ReachableStateFinder<Weather, Activity> allStatesReachable = o -> asList(Weather.values());
 		stream(Activity.values()).forEach(o ->
-				assertEquals(allStatesReachable, Wikipedia.INSTANCE.hmm.getReachableStatesFor(o)));
+				assertEquals(asList(Weather.values()), Wikipedia.INSTANCE.hmm.getReachableStatesFor(o)));
 	}
 
 	@Test
