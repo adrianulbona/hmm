@@ -24,9 +24,7 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 		final OptimalTransition<S> lastTransitionForOptimum = probabilityLattice.stream()
 				.max((ot1, ot2) -> Double.compare(ot1.probability, ot2.probability))
 				.get();
-		final List<S> optimalStateSequence = optimalStateSequence(lastTransitionForOptimum);
-		optimalStateSequence.forEach(System.out::println);
-		return optimalStateSequence;
+		return optimalStateSequence(lastTransitionForOptimum);
 	}
 
 	private List<S> optimalStateSequence(OptimalTransition<S> lastTransitionForOptimum) {
@@ -34,7 +32,7 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 			return new ArrayList<>();
 		}
 		final List<S> sequence = optimalStateSequence(lastTransitionForOptimum.getSource());
-		sequence.add(lastTransitionForOptimum.state);
+		sequence.add(0, lastTransitionForOptimum.state);
 		return sequence;
 	}
 
