@@ -53,7 +53,7 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 				.stream()
 				.map(state -> {
 					final Emission<S, O> emission = new Emission<>(state, observation);
-					final Double probability = emissionProbabilities.get(emission) / emissionProbabilities.size();
+					final Double probability = emissionProbabilities.get(emission) * hmm.initialProbabilityFor(state);
 					return new OptimalTransition<>(OptimalTransition.start(), state, probability);
 				})
 				.collect(toList());

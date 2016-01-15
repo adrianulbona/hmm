@@ -66,6 +66,10 @@ public class Model<S extends State, O extends Observation> {
 		return reachableStatesCache.get(observation);
 	}
 
+	public Double initialProbabilityFor(S state) {
+		return probabilityCalculator.probability(state);
+	}
+
 	@Data
 	private class EmissionProbability {
 

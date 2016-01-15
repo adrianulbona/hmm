@@ -8,25 +8,26 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static ro.ab.hmm.sample.Wikipedia.Activity.CLEAN;
-import static ro.ab.hmm.sample.Wikipedia.Activity.SHOP;
-import static ro.ab.hmm.sample.Wikipedia.Activity.WALK;
+import static ro.ab.hmm.sample.WikipediaHMM.Activity.CLEAN;
+import static ro.ab.hmm.sample.WikipediaHMM.Activity.SHOP;
+import static ro.ab.hmm.sample.WikipediaHMM.Activity.WALK;
 
 /**
  * Created by adrianbona on 1/14/16.
  */
-public enum Wikipedia {
+public enum WikipediaHMM {
 	INSTANCE;
 
-	public final Model<Weather, Activity> hmm;
+	public final Model<Weather, Activity> model;
 
-	Wikipedia() {
+	WikipediaHMM() {
 		final List<Activity> observations = asList(CLEAN, CLEAN, CLEAN, CLEAN, WALK, WALK);
 		final ProbabilityCalculator<Weather, Activity> probabilityCalculator = new ProbabilityCalculator<>(
+				s -> 1.0 / Weather.values().length,
 				EmissionProbabilities.INSTANCE.data::get,
 				TransitionProbabilities.INSTANCE.data::get);
 		final ReachableStateFinder<Weather, Activity> reachableStateFinder = observation -> asList(Weather.values());
-		hmm = new Model<>(observations, probabilityCalculator, reachableStateFinder);
+		this.model = new Model<>(observations, probabilityCalculator, reachableStateFinder);
 	}
 
 	public enum Weather implements State {

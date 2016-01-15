@@ -13,10 +13,19 @@ import ro.ab.hmm.Transition;
 
 @RequiredArgsConstructor
 public class ProbabilityCalculator<S extends State, O extends Observation>
-		implements EmissionProbabilityCalculator<S, O>, TransitionProbabilityCalculator<S> {
+		implements StartProbabilityCalculator<S>, EmissionProbabilityCalculator<S, O>,
+		TransitionProbabilityCalculator<S> {
 
+	private final StartProbabilityCalculator<S> startProbabilityCalculator;
 	private final EmissionProbabilityCalculator<S, O> emissionProbabilityCalculator;
 	private final TransitionProbabilityCalculator<S> transitionProbabilityCalculator;
+
+
+	@Override
+	public Double probability(S state) {
+		final Double probability = startProbabilityCalculator.probability(state);
+		return probability == null ? 0.0 : probability;
+	}
 
 	@Override
 	public Double probability(Emission<S, O> emission) {
