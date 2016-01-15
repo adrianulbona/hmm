@@ -1,7 +1,6 @@
 package ro.ab.hmm.solver;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import ro.ab.hmm.*;
 
 import java.util.*;
@@ -13,10 +12,23 @@ import static java.util.stream.IntStream.range;
  * Created by adrianbona on 1/14/16.
  */
 
-@RequiredArgsConstructor
 public class MostProbableStateSequenceFinder<S extends State, O extends Observation> implements Solver<List<S>> {
 
 	private final Model<S, O> hmm;
+	private final List<MostProbableStateSequenceFinder.Observer<S, O>> observers;
+
+	public MostProbableStateSequenceFinder(Model<S, O> hmm) {
+		this.hmm = hmm;
+		observers = new ArrayList<>();
+	}
+
+	public void addObserver(Observer<S, O> observer) {
+		observers.add(observer);
+	}
+
+	public void removeObserver(Observer<S, O> observer) {
+		observers.remove(observer);
+	}
 
 	@Override
 	public List<S> solve() {
@@ -32,7 +44,7 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 			return new ArrayList<>();
 		}
 		final List<S> sequence = optimalStateSequence(lastTransitionForOptimum.getSource());
-		sequence.add(0, lastTransitionForOptimum.state);
+		sequence.add(lastTransitionForOptimum.state);
 		return sequence;
 	}
 
@@ -48,13 +60,17 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 	}
 
 	private List<OptimalTransition<S>> optimalTransitions(O observation) {
+		observers.forEach(o -> o.processingObservation(observation));
 		final Map<Emission<S, O>, Double> emissionProbabilities = hmm.emissionProbabilitiesFor(observation);
 		return hmm.getReachableStatesFor(observation)
 				.stream()
 				.map(state -> {
 					final Emission<S, O> emission = new Emission<>(state, observation);
 					final Double probability = emissionProbabilities.get(emission) * hmm.initialProbabilityFor(state);
-					return new OptimalTransition<>(OptimalTransition.start(), state, probability);
+					final OptimalTransition<S> optimalTransition = new OptimalTransition<>(OptimalTransition.start(),
+							state, probability);
+					observers.forEach(observer -> observer.foundOptimalTransitions(optimalTransition));
+					return optimalTransition;
 				})
 				.collect(toList());
 	}
@@ -63,6 +79,7 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 			ReducibleObservation<O> reducibleObservation) {
 		final O observation = reducibleObservation.observation;
 		final O previousObservation = reducibleObservation.previousObservation;
+		observers.forEach(o -> o.processingObservation(observation));
 		final Map<Emission<S, O>, Double> emissions = hmm.emissionProbabilitiesFor(observation);
 		final Map<Transition<S>, Double> transitions = hmm.transitionProbabilitiesFor(previousObservation,
 				observation);
@@ -78,11 +95,11 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 	private OptimalTransition<S> findOptimalTransitionForState(S state, O observation,
 			Map<Emission<S, O>, Double> emissions, Map<Transition<S>, Double> transitions,
 			List<OptimalTransition<S>> optimalTransitions) {
-		return optimalTransitions.stream()
+		final OptimalTransition<S> optimalTransition = optimalTransitions.stream()
 				.map(ot -> {
 					final Double previousStateOptimum = ot.getProbability();
 					final Double transitionProbability = transitions.get(new Transition<>(ot.getState(), state));
-					final Double emissionProbability = emissions.get(new Emission<>(ot.getState(), observation));
+					final Double emissionProbability = emissions.get(new Emission<>(state, observation));
 					return new OptimalTransition<>(ot, state,
 							previousStateOptimum * transitionProbability * emissionProbability
 					);
@@ -90,10 +107,12 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 				.max((ps1, ps2) -> ps1.getProbability()
 						.compareTo(ps2.getProbability()))
 				.get();
+		observers.forEach(observer -> observer.foundOptimalTransitions(optimalTransition));
+		return optimalTransition;
 	}
 
 	@Data
-	private static class OptimalTransition<S extends State> {
+	public static class OptimalTransition<S extends State> {
 		private final OptimalTransition<S> source;
 		private final S state;
 		private final Double probability;
@@ -114,8 +133,13 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 	}
 
 	@Data
-	public static class ReducibleObservation<O extends Observation> {
+	private static class ReducibleObservation<O extends Observation> {
 		private final O previousObservation;
 		private final O observation;
+	}
+
+	public interface Observer<S extends State, O extends Observation> {
+		void processingObservation(O observation);
+		void foundOptimalTransitions(OptimalTransition<S> optimalTransitions);
 	}
 }
