@@ -1,7 +1,7 @@
-package ro.ab.hmm.sample;
+package io.github.adrianulbona.hmm.sample;
 
-import ro.ab.hmm.*;
-import ro.ab.hmm.probability.ProbabilityCalculator;
+import io.github.adrianulbona.hmm.*;
+import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
 
 import java.util.HashMap;
 import java.util.List;

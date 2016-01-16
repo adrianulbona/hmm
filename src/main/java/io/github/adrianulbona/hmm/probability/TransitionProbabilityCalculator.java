@@ -1,8 +1,7 @@
-package ro.ab.hmm.probability;
+package io.github.adrianulbona.hmm.probability;
 
-import ro.ab.hmm.Observation;
-import ro.ab.hmm.State;
-import ro.ab.hmm.Transition;
+import io.github.adrianulbona.hmm.State;
+import io.github.adrianulbona.hmm.Transition;
 
 
 /**

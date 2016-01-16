@@ -1,10 +1,10 @@
-package ro.ab.hmm.probability;
+package io.github.adrianulbona.hmm.probability;
 
+import io.github.adrianulbona.hmm.State;
 import lombok.RequiredArgsConstructor;
-import ro.ab.hmm.Emission;
-import ro.ab.hmm.Observation;
-import ro.ab.hmm.State;
-import ro.ab.hmm.Transition;
+import io.github.adrianulbona.hmm.Emission;
+import io.github.adrianulbona.hmm.Observation;
+import io.github.adrianulbona.hmm.Transition;
 
 
 /**

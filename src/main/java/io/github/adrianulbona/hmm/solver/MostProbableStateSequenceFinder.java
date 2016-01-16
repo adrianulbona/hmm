@@ -1,7 +1,7 @@
-package ro.ab.hmm.solver;
+package io.github.adrianulbona.hmm.solver;
 
+import io.github.adrianulbona.hmm.*;
 import lombok.Data;
-import ro.ab.hmm.*;
 
 import java.util.*;
 

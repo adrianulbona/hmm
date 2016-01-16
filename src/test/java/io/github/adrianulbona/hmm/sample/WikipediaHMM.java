@@ -1,16 +1,16 @@
-package ro.ab.hmm.sample;
+package io.github.adrianulbona.hmm.sample;
 
-import ro.ab.hmm.*;
-import ro.ab.hmm.probability.ProbabilityCalculator;
+import io.github.adrianulbona.hmm.*;
+import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static ro.ab.hmm.sample.WikipediaHMM.Activity.CLEAN;
-import static ro.ab.hmm.sample.WikipediaHMM.Activity.SHOP;
-import static ro.ab.hmm.sample.WikipediaHMM.Activity.WALK;
+import static io.github.adrianulbona.hmm.sample.WikipediaHMM.Activity.CLEAN;
+import static io.github.adrianulbona.hmm.sample.WikipediaHMM.Activity.SHOP;
+import static io.github.adrianulbona.hmm.sample.WikipediaHMM.Activity.WALK;
 
 /**
  * Created by adrianbona on 1/14/16.

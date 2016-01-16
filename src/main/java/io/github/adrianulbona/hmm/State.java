@@ -1,4 +1,4 @@
-package ro.ab.hmm;
+package io.github.adrianulbona.hmm;
 
 /**
  * Created by adrianbona on 1/13/16.

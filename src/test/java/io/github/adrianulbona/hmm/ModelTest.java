@@ -1,10 +1,10 @@
-package ro.ab.hmm;
+package io.github.adrianulbona.hmm;
 
 import lombok.Data;
 import org.junit.Test;
-import ro.ab.hmm.sample.WikipediaHMM;
-import ro.ab.hmm.sample.WikipediaHMM.Activity;
-import ro.ab.hmm.sample.WikipediaHMM.Weather;
+import io.github.adrianulbona.hmm.sample.WikipediaHMM;
+import io.github.adrianulbona.hmm.sample.WikipediaHMM.Activity;
+import io.github.adrianulbona.hmm.sample.WikipediaHMM.Weather;
 
 import java.util.List;
 import java.util.Map;

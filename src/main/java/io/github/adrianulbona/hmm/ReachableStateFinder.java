@@ -1,4 +1,4 @@
-package ro.ab.hmm;
+package io.github.adrianulbona.hmm;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ro.ab.hmm.solver;
+package io.github.adrianulbona.hmm.solver;
 
 /**
  * Created by adrianbona on 1/14/16.

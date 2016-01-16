@@ -1,9 +1,9 @@
-package ro.ab.hmm;
+package io.github.adrianulbona.hmm;
 
+import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ro.ab.hmm.probability.ProbabilityCalculator;
 
 import java.util.HashMap;
 import java.util.List;
