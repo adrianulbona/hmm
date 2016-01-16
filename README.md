@@ -11,7 +11,7 @@ Besides the basic abstractions, a most probable state sequence solution is imple
 ```java
 Model<MedicalState, Symptom> model = WikipediaViterbi.INSTANCE.model;
 List<Symptom> symptoms = asList(NORMAL, COLD, DIZZY);
-List<MedicalState> medicalEvolution = new MostProbableStateSequenceFinder<>(model).basedOn(symptoms);
+List<MedicalState> evolution = new MostProbableStateSequenceFinder<>(model).basedOn(symptoms);
 ```
 
 #### How to define a model: 
@@ -39,7 +39,8 @@ public enum WikipediaViterbi {
 	
 	private ProbabilityCalculator<MedicalState, Symptom> probabilityCalculator() {
 		return new ProbabilityCalculator<>(StartProbabilities.INSTANCE.data::get,
-				EmissionProbabilities.INSTANCE.data::get, TransitionProbabilities.INSTANCE.data::get);
+				EmissionProbabilities.INSTANCE.data::get, 
+				TransitionProbabilities.INSTANCE.data::get);
 	}
 
 	private ReachableStateFinder<MedicalState, Symptom> reachableStatesFinder() {
