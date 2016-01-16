@@ -3,6 +3,7 @@ package io.github.adrianulbona.hmm.solver;
 import io.github.adrianulbona.hmm.sample.WikipediaViterbi;
 import io.github.adrianulbona.hmm.sample.WikipediaViterbi.MedicalState;
 import io.github.adrianulbona.hmm.sample.WikipediaViterbi.Symptom;
+import io.github.adrianulbona.hmm.solver.MostProbableStateSequenceFinder.Observer;
 import org.junit.Ignore;
 import org.junit.Test;
 import io.github.adrianulbona.hmm.solver.MostProbableStateSequenceFinder.OptimalTransition;
@@ -20,7 +21,6 @@ import static org.junit.Assert.*;
  */
 public class MostProbableStateSequenceFinderTest {
 
-	@Ignore
 	@Test
 	public void testSolveWikipediaViterti() throws Exception {
 		final MostProbableStateSequenceFinder<MedicalState, Symptom>
@@ -33,17 +33,15 @@ public class MostProbableStateSequenceFinderTest {
 		assertEquals(asList(HEALTHY, HEALTHY, FEVER), solver.forObservations(asList(NORMAL, COLD, DIZZY)));
 	}
 
-	private static class Tracer implements MostProbableStateSequenceFinder.Observer<MedicalState,
-			Symptom> {
+	private static class Tracer implements Observer<MedicalState, Symptom> {
 		@Override
 		public void processingObservation(Symptom observation) {
-			System.out.println("reducing observation: " + observation);
+			System.out.println("processing observation: " + observation);
 		}
 
 		@Override
 		public void foundOptimalTransitions(OptimalTransition<MedicalState> optimalTransition) {
-			System.out.println(
-					String.format("%s <- %.5f", optimalTransition.getState(), optimalTransition.getProbability()));
+			System.out.printf("%s <- %.5f%n", optimalTransition.getState(), optimalTransition.getProbability());
 		}
 	}
 }
