@@ -34,7 +34,7 @@
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">Model&lt;<span class="pl-smi">MedicalState</span>, <span class="pl-smi">Symptom</span>&gt;</span> model <span class="pl-k">=</span> <span class="pl-smi">WikipediaViterbi</span><span class="pl-c1"><span class="pl-k">.</span>INSTANCE</span><span class="pl-k">.</span>model;
 <span class="pl-k">List&lt;<span class="pl-smi">Symptom</span>&gt;</span> symptoms <span class="pl-k">=</span> asList(<span class="pl-c1">NORMAL</span>, <span class="pl-c1">COLD</span>, <span class="pl-c1">DIZZY</span>);
-<span class="pl-k">List&lt;<span class="pl-smi">MedicalState</span>&gt;</span> medicalEvolution <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">MostProbableStateSequenceFinder&lt;&gt;</span>(model)<span class="pl-k">.</span>basedOn(symptoms);</pre></div>
+<span class="pl-k">List&lt;<span class="pl-smi">MedicalState</span>&gt;</span> evolution <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">MostProbableStateSequenceFinder&lt;&gt;</span>(model)<span class="pl-k">.</span>basedOn(symptoms);</pre></div>
 
 <h4>
 <a id="how-to-define-a-model" class="anchor" href="#how-to-define-a-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to define a model:</h4>
@@ -61,7 +61,8 @@
 
     <span class="pl-k">private</span> <span class="pl-k">ProbabilityCalculator&lt;<span class="pl-smi">MedicalState</span>, <span class="pl-smi">Symptom</span>&gt;</span> <span class="pl-en">probabilityCalculator</span>() {
         <span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-k">ProbabilityCalculator&lt;&gt;</span>(<span class="pl-smi">StartProbabilities</span><span class="pl-c1"><span class="pl-k">.</span>INSTANCE</span><span class="pl-k">.</span>data<span class="pl-k">::</span>get,
-                <span class="pl-smi">EmissionProbabilities</span><span class="pl-c1"><span class="pl-k">.</span>INSTANCE</span><span class="pl-k">.</span>data<span class="pl-k">::</span>get, <span class="pl-smi">TransitionProbabilities</span><span class="pl-c1"><span class="pl-k">.</span>INSTANCE</span><span class="pl-k">.</span>data<span class="pl-k">::</span>get);
+                <span class="pl-smi">EmissionProbabilities</span><span class="pl-c1"><span class="pl-k">.</span>INSTANCE</span><span class="pl-k">.</span>data<span class="pl-k">::</span>get, 
+                <span class="pl-smi">TransitionProbabilities</span><span class="pl-c1"><span class="pl-k">.</span>INSTANCE</span><span class="pl-k">.</span>data<span class="pl-k">::</span>get);
     }
 
     <span class="pl-k">private</span> <span class="pl-k">ReachableStateFinder&lt;<span class="pl-smi">MedicalState</span>, <span class="pl-smi">Symptom</span>&gt;</span> <span class="pl-en">reachableStatesFinder</span>() {
