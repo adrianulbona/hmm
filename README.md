@@ -7,9 +7,9 @@ Besides the basic abstractions, a most probable state sequence solution is imple
 ###### Getting the most probable sequence of states based on a sequence of observations:
 
 ```java
-		final MostProbableStateSequenceFinder<MedicalState, Symptom>
+final MostProbableStateSequenceFinder<MedicalState, Symptom>
 				solver = new MostProbableStateSequenceFinder<>(WikipediaViterbi.INSTANCE.model);
-		final List<MedicalState> viterbiPath = solver.forObservations(asList(NORMAL, COLD, DIZZY)));
+inal List<MedicalState> viterbiPath = solver.forObservations(asList(NORMAL, COLD, DIZZY)));
 ```
 
 ###### How to define a model: 
