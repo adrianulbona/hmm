@@ -1,18 +1,20 @@
-### HMM abstractions in Java 8 [![Build Status](https://travis-ci.org/adrianulbona/hmm.svg)](https://travis-ci.org/adrianulbona/hmm)
+## HMM abstractions in Java 8 
+
+[![Build Status](https://travis-ci.org/adrianulbona/hmm.svg)](https://travis-ci.org/adrianulbona/hmm)
 
 Besides the basic abstractions, a most probable state sequence solution is implemented based on the Viterbi algorithm.
 
-##### How to use it:
+### How to use it:
 
-###### Getting the most probable sequence of states based on a sequence of observations:
+#### Getting the most probable sequence of states based on a sequence of observations:
 
 ```java
-final MostProbableStateSequenceFinder<MedicalState, Symptom>
-				solver = new MostProbableStateSequenceFinder<>(WikipediaViterbi.INSTANCE.model);
-inal List<MedicalState> viterbiPath = solver.forObservations(asList(NORMAL, COLD, DIZZY)));
+Model<MedicalState, Symptom> model = WikipediaViterbi.INSTANCE.model;
+List<Symptom> symptoms = asList(NORMAL, COLD, DIZZY);
+List<MedicalState> medicalEvolution = new MostProbableStateSequenceFinder<>(model).basedOn(symptoms));
 ```
 
-###### How to define a model: 
+#### How to define a model: 
 
 ```java
 public enum WikipediaViterbi {
@@ -21,28 +23,30 @@ public enum WikipediaViterbi {
 	public final Model<MedicalState, Symptom> model;
 
 	WikipediaViterbi() {
-		final ProbabilityCalculator<MedicalState, Symptom> probabilityCalculator = 
-		  new ProbabilityCalculator<>(
-				StartProbabilities.INSTANCE.data::get,
-				EmissionProbabilities.INSTANCE.data::get,
-				TransitionProbabilities.INSTANCE.data::get);
-		final ReachableStateFinder<MedicalState, Symptom> reachableStateFinder = 
-		  observation -> asList(MedicalState.values());
-		this.model = new Model<>(probabilityCalculator, reachableStateFinder);
+		model = new Model<>(probabilityCalculator(), reachableStatesFinder());
 	}
 
 	public enum MedicalState implements State {
 		HEALTHY,
-		FEVER
+		FEVER;
 	}
-
+	
 	public enum Symptom implements Observation {
 		NORMAL,
 		COLD,
-		DIZZY
+		DIZZY;
+	}
+	
+	private ProbabilityCalculator<MedicalState, Symptom> probabilityCalculator() {
+		return new ProbabilityCalculator<>(StartProbabilities.INSTANCE.data::get,
+				EmissionProbabilities.INSTANCE.data::get, TransitionProbabilities.INSTANCE.data::get);
 	}
 
-	public enum StartProbabilities {
+	private ReachableStateFinder<MedicalState, Symptom> reachableStatesFinder() {
+		return observation -> asList(MedicalState.values());
+	}
+
+	private enum StartProbabilities {
 		INSTANCE;
 
 		public final Map<MedicalState, Double> data;
@@ -54,7 +58,7 @@ public enum WikipediaViterbi {
 		}
 	}
 
-	public enum TransitionProbabilities {
+	private enum TransitionProbabilities {
 		INSTANCE;
 
 		public final Map<Transition<MedicalState>, Double> data;
@@ -68,7 +72,7 @@ public enum WikipediaViterbi {
 		}
 	}
 
-	public enum EmissionProbabilities {
+	private enum EmissionProbabilities {
 		INSTANCE;
 
 		public final Map<Emission<MedicalState, Symptom>, Double> data;
