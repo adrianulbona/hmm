@@ -8,5 +8,5 @@ import java.util.List;
  * Created by adrianbona on 1/14/16.
  */
 public interface Solver<O extends Observation, T> {
-	T forObservations(List<O> observations);
+	T basedOn(List<O> observations);
 }

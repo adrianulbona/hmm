@@ -1,10 +1,10 @@
 package io.github.adrianulbona.hmm.solver;
 
+import io.github.adrianulbona.hmm.Model;
 import io.github.adrianulbona.hmm.sample.WikipediaViterbi;
 import io.github.adrianulbona.hmm.sample.WikipediaViterbi.MedicalState;
 import io.github.adrianulbona.hmm.sample.WikipediaViterbi.Symptom;
 import io.github.adrianulbona.hmm.solver.MostProbableStateSequenceFinder.Observer;
-import org.junit.Ignore;
 import org.junit.Test;
 import io.github.adrianulbona.hmm.solver.MostProbableStateSequenceFinder.OptimalTransition;
 
@@ -23,14 +23,16 @@ public class MostProbableStateSequenceFinderTest {
 
 	@Test
 	public void testSolveWikipediaViterti() throws Exception {
-		final MostProbableStateSequenceFinder<MedicalState, Symptom>
-				solver = new MostProbableStateSequenceFinder<>(WikipediaViterbi.INSTANCE.model);
+		final Model<MedicalState, Symptom> model = WikipediaViterbi.INSTANCE.model;
+		final MostProbableStateSequenceFinder<MedicalState, Symptom> solver =
+				new MostProbableStateSequenceFinder<>(model);
 		solver.addObserver(new Tracer());
 		/*
 		* 	Healthy: 0.30000 0.08400 0.00588
 		*	Fever:   0.04000 0.02700 0.01512
 		*/
-		assertEquals(asList(HEALTHY, HEALTHY, FEVER), solver.forObservations(asList(NORMAL, COLD, DIZZY)));
+		final List<Symptom> observations = asList(NORMAL, COLD, DIZZY);
+		assertEquals(asList(HEALTHY, HEALTHY, FEVER), solver.basedOn(observations));
 	}
 
 	private static class Tracer implements Observer<MedicalState, Symptom> {

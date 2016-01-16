@@ -4,7 +4,6 @@ import io.github.adrianulbona.hmm.*;
 import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
@@ -18,26 +17,30 @@ public enum WikipediaViterbi {
 	public final Model<MedicalState, Symptom> model;
 
 	WikipediaViterbi() {
-		final ProbabilityCalculator<MedicalState, Symptom> probabilityCalculator = new ProbabilityCalculator<>(
-				StartProbabilities.INSTANCE.data::get,
-				EmissionProbabilities.INSTANCE.data::get,
-				TransitionProbabilities.INSTANCE.data::get);
-		final ReachableStateFinder<MedicalState, Symptom> reachableStateFinder = observation -> asList(MedicalState.values());
-		this.model = new Model<>(probabilityCalculator, reachableStateFinder);
+		model = new Model<>(probabilityCalculator(), reachableStatesFinder());
 	}
 
 	public enum MedicalState implements State {
 		HEALTHY,
-		FEVER
+		FEVER;
 	}
 
 	public enum Symptom implements Observation {
 		NORMAL,
 		COLD,
-		DIZZY
+		DIZZY;
 	}
 
-	public enum StartProbabilities {
+	private ProbabilityCalculator<MedicalState, Symptom> probabilityCalculator() {
+		return new ProbabilityCalculator<>(StartProbabilities.INSTANCE.data::get,
+				EmissionProbabilities.INSTANCE.data::get, TransitionProbabilities.INSTANCE.data::get);
+	}
+
+	private ReachableStateFinder<MedicalState, Symptom> reachableStatesFinder() {
+		return observation -> asList(MedicalState.values());
+	}
+
+	private enum StartProbabilities {
 		INSTANCE;
 
 		public final Map<MedicalState, Double> data;
@@ -49,7 +52,7 @@ public enum WikipediaViterbi {
 		}
 	}
 
-	public enum TransitionProbabilities {
+	private enum TransitionProbabilities {
 		INSTANCE;
 
 		public final Map<Transition<MedicalState>, Double> data;
@@ -63,7 +66,7 @@ public enum WikipediaViterbi {
 		}
 	}
 
-	public enum EmissionProbabilities {
+	private enum EmissionProbabilities {
 		INSTANCE;
 
 		public final Map<Emission<MedicalState, Symptom>, Double> data;

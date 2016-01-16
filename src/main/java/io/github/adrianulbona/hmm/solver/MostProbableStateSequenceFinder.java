@@ -31,7 +31,7 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 	}
 
 	@Override
-	public List<S> forObservations(List<O> observations) {
+	public List<S> basedOn(List<O> observations) {
 		final List<OptimalTransition<S>> probabilityLattice = buildCompleteLattice(observations);
 		final OptimalTransition<S> lastTransitionForOptimum = probabilityLattice.stream()
 				.max((ot1, ot2) -> Double.compare(ot1.probability, ot2.probability))
