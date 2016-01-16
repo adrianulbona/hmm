@@ -21,16 +21,6 @@ import static org.junit.Assert.assertEquals;
 public class ModelTest {
 
 	@Test
-	public void testObservationsCount() {
-		assertEquals(6, WikipediaHMM.INSTANCE.model.observationCount());
-	}
-
-	@Test
-	public void testDistinctStatesCount() {
-		assertEquals(2, WikipediaHMM.INSTANCE.model.numberOfDistinctStates());
-	}
-
-	@Test
 	public void testRetrievalOfEmissionProbabilities() {
 		stream(Activity.values()).forEach(o -> {
 			final Map<Emission<Weather, Activity>, Double> emissionProbabilities =

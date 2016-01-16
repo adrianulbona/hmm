@@ -1,8 +1,12 @@
 package io.github.adrianulbona.hmm.solver;
 
+import io.github.adrianulbona.hmm.Observation;
+
+import java.util.List;
+
 /**
  * Created by adrianbona on 1/14/16.
  */
-public interface Solver<T> {
-	T solve();
+public interface Solver<O extends Observation, T> {
+	T forObservations(List<O> observations);
 }

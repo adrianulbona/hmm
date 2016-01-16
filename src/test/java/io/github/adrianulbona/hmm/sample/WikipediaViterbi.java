@@ -18,13 +18,12 @@ public enum WikipediaViterbi {
 	public final Model<MedicalState, Symptom> model;
 
 	WikipediaViterbi() {
-		final List<Symptom> observations = asList(Symptom.NORMAL, Symptom.COLD, Symptom.DIZZY);
 		final ProbabilityCalculator<MedicalState, Symptom> probabilityCalculator = new ProbabilityCalculator<>(
 				StartProbabilities.INSTANCE.data::get,
 				EmissionProbabilities.INSTANCE.data::get,
 				TransitionProbabilities.INSTANCE.data::get);
 		final ReachableStateFinder<MedicalState, Symptom> reachableStateFinder = observation -> asList(MedicalState.values());
-		this.model = new Model<>(observations, probabilityCalculator, reachableStateFinder);
+		this.model = new Model<>(probabilityCalculator, reachableStateFinder);
 	}
 
 	public enum MedicalState implements State {

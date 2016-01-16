@@ -12,7 +12,7 @@ import static java.util.stream.IntStream.range;
  * Created by adrianbona on 1/14/16.
  */
 
-public class MostProbableStateSequenceFinder<S extends State, O extends Observation> implements Solver<List<S>> {
+public class MostProbableStateSequenceFinder<S extends State, O extends Observation> implements Solver<O, List<S>> {
 
 	private final Model<S, O> hmm;
 	private final List<MostProbableStateSequenceFinder.Observer<S, O>> observers;
@@ -31,8 +31,8 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 	}
 
 	@Override
-	public List<S> solve() {
-		final List<OptimalTransition<S>> probabilityLattice = buildCompleteLattice();
+	public List<S> forObservations(List<O> observations) {
+		final List<OptimalTransition<S>> probabilityLattice = buildCompleteLattice(observations);
 		final OptimalTransition<S> lastTransitionForOptimum = probabilityLattice.stream()
 				.max((ot1, ot2) -> Double.compare(ot1.probability, ot2.probability))
 				.get();
@@ -48,8 +48,7 @@ public class MostProbableStateSequenceFinder<S extends State, O extends Observat
 		return sequence;
 	}
 
-	private List<OptimalTransition<S>> buildCompleteLattice() {
-		final List<O> observations = hmm.getObservations();
+	private List<OptimalTransition<S>> buildCompleteLattice(List<O> observations) {
 		final List<ReducibleObservation<O>> reducibleObservations = range(0, observations.size() - 1)
 				.mapToObj(i -> new ReducibleObservation<>(observations.get(i), observations.get(i + 1)))
 				.collect(toList());

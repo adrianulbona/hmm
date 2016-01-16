@@ -21,13 +21,13 @@ public enum WikipediaHMM {
 	public final Model<Weather, Activity> model;
 
 	WikipediaHMM() {
-		final List<Activity> observations = asList(CLEAN, CLEAN, CLEAN, CLEAN, WALK, WALK);
+		final double fairProbability = 1.0 / Weather.values().length;
 		final ProbabilityCalculator<Weather, Activity> probabilityCalculator = new ProbabilityCalculator<>(
-				s -> 1.0 / Weather.values().length,
+				s -> fairProbability,
 				EmissionProbabilities.INSTANCE.data::get,
 				TransitionProbabilities.INSTANCE.data::get);
 		final ReachableStateFinder<Weather, Activity> reachableStateFinder = observation -> asList(Weather.values());
-		this.model = new Model<>(observations, probabilityCalculator, reachableStateFinder);
+		this.model = new Model<>(probabilityCalculator, reachableStateFinder);
 	}
 
 	public enum Weather implements State {

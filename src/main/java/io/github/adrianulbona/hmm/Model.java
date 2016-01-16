@@ -19,23 +19,20 @@ import static java.util.stream.Collectors.*;
 @RequiredArgsConstructor
 public class Model<S extends State, O extends Observation> {
 
-	@Getter
-	private final List<O> observations;
 	private final ProbabilityCalculator<S, O> probabilityCalculator;
 	private final ReachableStateFinder<S, O> reachableStateFinder;
 
 	private final Map<O, List<S>> reachableStatesCache = new HashMap<>();
 
-	public int observationCount() {
-		return observations.size();
+	public Double initialProbabilityFor(S state) {
+		return probabilityCalculator.probability(state);
 	}
 
-	public int numberOfDistinctStates() {
-		return observations.stream()
-				.map(reachableStateFinder::reachableFor)
-				.flatMap(List::stream)
-				.collect(toSet())
-				.size();
+	public List<S> getReachableStatesFor(O observation) {
+		if (!reachableStatesCache.containsKey(observation)) {
+			reachableStatesCache.put(observation, reachableStateFinder.reachableFor(observation));
+		}
+		return reachableStatesCache.get(observation);
 	}
 
 	public Map<Emission<S, O>, Double> emissionProbabilitiesFor(O observation) {
@@ -57,17 +54,6 @@ public class Model<S extends State, O extends Observation> {
 		return transitions.stream()
 				.map(t -> new TransitionProbability(t, probabilityCalculator.probability(t)))
 				.collect(toMap(TransitionProbability::getTransition, TransitionProbability::getProbability));
-	}
-
-	public List<S> getReachableStatesFor(O observation) {
-		if (!reachableStatesCache.containsKey(observation)) {
-			reachableStatesCache.put(observation, reachableStateFinder.reachableFor(observation));
-		}
-		return reachableStatesCache.get(observation);
-	}
-
-	public Double initialProbabilityFor(S state) {
-		return probabilityCalculator.probability(state);
 	}
 
 	@Data
