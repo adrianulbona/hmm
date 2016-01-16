@@ -11,7 +11,7 @@ Besides the basic abstractions, a most probable state sequence solution is imple
 ```java
 Model<MedicalState, Symptom> model = WikipediaViterbi.INSTANCE.model;
 List<Symptom> symptoms = asList(NORMAL, COLD, DIZZY);
-List<MedicalState> medicalEvolution = new MostProbableStateSequenceFinder<>(model).basedOn(symptoms));
+List<MedicalState> medicalEvolution = new MostProbableStateSequenceFinder<>(model).basedOn(symptoms);
 ```
 
 #### How to define a model: 
