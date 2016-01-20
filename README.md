@@ -4,7 +4,7 @@
 
 Besides the basic abstractions, a most probable state sequence solution is implemented based on the Viterbi algorithm.
 
-### How to use it:
+### The library is hosted on Maven Central:
 
 #### Maven
 ```xml
@@ -19,6 +19,8 @@ Besides the basic abstractions, a most probable state sequence solution is imple
 ```groovy
 compile 'io.github.adrianulbona:hmm:0.1.0'
 ```
+
+### How to use it:
 
 #### Getting the most probable sequence of states based on a sequence of observations:
 
