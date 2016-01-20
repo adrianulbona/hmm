@@ -6,6 +6,20 @@ Besides the basic abstractions, a most probable state sequence solution is imple
 
 ### How to use it:
 
+#### Maven
+```xml
+<dependency>
+    <groupId>io.github.adrianulbona</groupId>
+    <artifactId>hmm</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
+#### Gradle
+```groovy
+compile 'io.github.adrianulbona:hmm:0.1.0'
+```
+
 #### Getting the most probable sequence of states based on a sequence of observations:
 
 ```java
