@@ -1,10 +1,9 @@
 package io.github.adrianulbona.hmm.sample;
 
 import io.github.adrianulbona.hmm.*;
-import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
+import io.github.adrianulbona.hmm.probability.ProbabilityCalculatorImpl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
@@ -22,7 +21,7 @@ public enum WikipediaHMM {
 
 	WikipediaHMM() {
 		final double fairProbability = 1.0 / Weather.values().length;
-		final ProbabilityCalculator<Weather, Activity> probabilityCalculator = new ProbabilityCalculator<>(
+		final ProbabilityCalculatorImpl<Weather, Activity> probabilityCalculator = new ProbabilityCalculatorImpl<>(
 				s -> fairProbability,
 				EmissionProbabilities.INSTANCE.data::get,
 				TransitionProbabilities.INSTANCE.data::get);

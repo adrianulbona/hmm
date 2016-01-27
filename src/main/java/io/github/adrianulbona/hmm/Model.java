@@ -1,6 +1,7 @@
 package io.github.adrianulbona.hmm;
 
 import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
+import io.github.adrianulbona.hmm.probability.ProbabilityCalculatorImpl;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,9 @@ import static java.util.stream.Collectors.*;
  */
 
 @RequiredArgsConstructor
-public class Model<S extends State, O extends Observation> {
+public class Model<S extends State, O extends Observation> implements ProbabilityCalculator<S, O>{
 
+	@Getter
 	private final ProbabilityCalculator<S, O> probabilityCalculator;
 	private final ReachableStateFinder<S, O> reachableStateFinder;
 
@@ -54,6 +56,21 @@ public class Model<S extends State, O extends Observation> {
 		return transitions.stream()
 				.map(t -> new TransitionProbability(t, probabilityCalculator.probability(t)))
 				.collect(toMap(TransitionProbability::getTransition, TransitionProbability::getProbability));
+	}
+
+	@Override
+	public Double probability(Emission<S, O> emission) {
+		return probabilityCalculator.probability(emission);
+	}
+
+	@Override
+	public Double probability(S state) {
+		return probabilityCalculator.probability(state);
+	}
+
+	@Override
+	public Double probability(Transition<S> transition) {
+		return probabilityCalculator.probability(transition);
 	}
 
 	@Data

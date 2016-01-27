@@ -1,7 +1,7 @@
 package io.github.adrianulbona.hmm.sample;
 
 import io.github.adrianulbona.hmm.*;
-import io.github.adrianulbona.hmm.probability.ProbabilityCalculator;
+import io.github.adrianulbona.hmm.probability.ProbabilityCalculatorImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +31,8 @@ public enum WikipediaViterbi {
 		DIZZY;
 	}
 
-	private ProbabilityCalculator<MedicalState, Symptom> probabilityCalculator() {
-		return new ProbabilityCalculator<>(StartProbabilities.INSTANCE.data::get,
+	private ProbabilityCalculatorImpl<MedicalState, Symptom> probabilityCalculator() {
+		return new ProbabilityCalculatorImpl<>(StartProbabilities.INSTANCE.data::get,
 				EmissionProbabilities.INSTANCE.data::get, TransitionProbabilities.INSTANCE.data::get);
 	}
 
