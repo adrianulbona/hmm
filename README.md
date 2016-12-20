@@ -1,6 +1,7 @@
 ## HMM abstractions in Java 8 
 
 [![Build Status](https://travis-ci.org/adrianulbona/hmm.svg)](https://travis-ci.org/adrianulbona/hmm)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.adrianulbona/hmm/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.adrianulbona/hmm)
 
 Besides the basic abstractions, a most probable state sequence solution is implemented based on the Viterbi algorithm.
 
